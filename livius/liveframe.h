@@ -91,8 +91,16 @@ public:
 	const MenuMap &getMenu() const;
 	// get PGN
 	QString getPGN() const;
+    // get Score
+    QString getScore() const;
+    const QVector<double>& getVScore(){return current.score; };
+    const QVector<double>& getVTime(){return current.secs;}
+    const QVector<double>& getVDepth(){return current.depth;}
+    const QVector<double>& getVNPS(){return current.nps;}
+    int getNum0(){return current.mnum0;}
 	// get client
 	TLCVClient *getClient() const;
+
 
 signals:
 
@@ -109,6 +117,9 @@ private:
 	// game running?
 	bool running;
 
+        int curcolor, prevdepth, prevscore, prevsecs, prevmnum;
+        double prevnps;
+	
 	// current crosstable
 	QStringList crossTable;
 	// current gamelist
@@ -143,8 +154,13 @@ private:
 		cheng4::Board board;
 		// list of current game moves
 		std::vector< cheng4::Move > moves;
+            QVector< double > nps;
+            QVector< double > score;
+            QVector< double > depth;
+            QVector< double > secs;
+            int mnum0;
 
-		// clear
+	        // clear
 		void clear( bool full = 0 );
 	};
 

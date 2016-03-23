@@ -10,7 +10,7 @@ include(../base/base.pri)
 include(../gui/gui.pri)
 DESTDIR = $$PWD
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = livius
 TEMPLATE = app
@@ -28,7 +28,9 @@ SOURCES += main.cpp\
     pgndialog.cpp \
     chathighlight.cpp \
     aboutdialog.cpp \
-    debugconsoledialog.cpp
+    debugconsoledialog.cpp \
+    scoredialog.cpp \
+    graphdialog.cpp
 
 HEADERS  += mainwindow.h \
     liveinfo.h \
@@ -42,7 +44,9 @@ HEADERS  += mainwindow.h \
     chathighlight.h \
     aboutdialog.h \
     debugconsoledialog.h \
-    ack.h
+    ack.h \
+    scoredialog.h \
+    graphdialog.h
 
 FORMS    += mainwindow.ui \
     liveinfo.ui \
@@ -52,7 +56,11 @@ FORMS    += mainwindow.ui \
     emailgamedialog.ui \
     pgndialog.ui \
     aboutdialog.ui \
-    debugconsoledialog.ui
+    debugconsoledialog.ui \
+    scoredialog.ui \
+    graphdialog.ui
 
 RESOURCES += \
     livius.qrc
+
+unix: LIBS += -lqcustomplot

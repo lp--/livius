@@ -49,7 +49,7 @@ void LiveFrame::connectSignals( bool disconn )
 
 LiveFrame::LiveFrame(QWidget *parent, PieceSet *pset, const QString &nick, const QString &url,
 	quint16 port) :
-	super(parent), client(0), running(0)
+    super(parent), client(0), running(0), curcolor(0), prevdepth(0), prevscore(0), prevmnum(10000), prevnps(0.)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -125,9 +125,24 @@ QString LiveFrame::getPGN() const
 	return res;
 }
 
+// get Score
+QString LiveFrame::getScore() const
+{
+    QString res = "";
+    for( int i = 0; i<current.score.size(); i=i+2)
+    {
+        res +=   QString("%1 | %2 | %L3 | %L4\t").arg(round(current.depth[i])).arg(round(current.score[i])).arg(round(current.nps[i]/1e4)/1e2).arg(round(current.secs[i]));
+        if(i+1<current.score.size())
+        res +=   QString("%1 | %2 | %L3 | %L4\n").arg(round(current.depth[i+1])).arg(round(current.score[i+1])).arg(round(current.nps[i+1]/1e4)/1e2).arg(current.secs[i+1]);
+        //res += " ";
+    }
+    res += "\n---\n";
+    return res;
+}
+
 void LiveFrame::sendMessage( const QString &msg )
 {
-	client->chat(msg);
+    client->chat(msg);
 }
 
 void LiveFrame::changeNick( const QString &newNick )
@@ -152,17 +167,23 @@ void LiveFrame::parsePV( int color, const char *c )
 	TLCVClient::skipNonSpc( c );
 	int depth = QString( (std::string(beg, c-beg)).c_str() ).toInt();
 	info->setDepth( color, depth );
+    if(curcolor != color)current.depth.push_back(prevdepth);
+    prevdepth = depth;
 	// here comes centipawn score
 	TLCVClient::skipSpc( c );
 	beg = c;
 	TLCVClient::skipNonSpc( c );
 	int score = QString( (std::string(beg, c-beg)).c_str() ).toInt();
 	info->setScore( color, score );
+    if(curcolor != color)current.score.push_back(prevscore);
+    prevscore=score;
 	// here comes time in hundreds of seconds
 	TLCVClient::skipSpc( c );
 	beg = c;
 	TLCVClient::skipNonSpc( c );
 	int timehs = QString( (std::string(beg, c-beg)).c_str() ).toInt();
+    if(curcolor != color)current.secs.push_back(prevsecs);
+    prevsecs = timehs/100;
 	// here comee nodes
 	TLCVClient::skipSpc( c );
 	beg = c;
@@ -170,10 +191,13 @@ void LiveFrame::parsePV( int color, const char *c )
 	double nodes = (qint64)QString( (std::string(beg, c-beg)).c_str() ).toLongLong();
 	double nps = timehs ? nodes * 100.0 / timehs : 0;
 	info->setNodes( color, nodes, nps );
+    if(curcolor != color)current.nps.push_back(prevnps);
+    prevnps = nps;
 	TLCVClient::skipSpc( c );
 	// the rest is pv
 	info->setPV( color, QString( c ).trimmed(), chat->getPrettyPV(),
 		chat->getPVTip(), &board->getBoard() );
+	curcolor = color;
 }
 
 void LiveFrame::parseTime( int color, const char *c )
@@ -291,6 +315,15 @@ bool LiveFrame::parseMove( int color, AckType ack, const char *c, bool nobuffer 
 	// here comes move number (nn.)
 	TLCVClient::skipNonSpc( c );
 	int mnum = (int)QString( (std::string(beg, c-beg)).c_str() ).toDouble();
+    if( mnum < prevmnum ){
+        current.mnum0 = mnum;
+        current.score.clear();
+        current.secs.clear();
+        current.depth.clear();
+        current.nps.clear();
+    }
+    prevmnum=mnum;
+
 	TLCVClient::skipSpc( c );
 
 	QString infoMove;
@@ -596,7 +629,7 @@ void LiveFrame::flipBoard()
 	info->flipPlayers();
 }
 
-// send crosstable command
+// send able command
 void LiveFrame::getCrossTable() const
 {
 	client->getCrossTable();
@@ -773,3 +806,5 @@ TLCVClient *LiveFrame::getClient() const
 {
 	return client;
 }
+
+

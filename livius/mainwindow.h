@@ -29,6 +29,7 @@ freely, subject to the following restrictions:
 #include <QMainWindow>
 #include "liveframe.h"
 
+
 class QLabel;
 class PieceSet;
 
@@ -45,6 +46,8 @@ class LiveFrame;
 class ResultsDialog;
 class EmailGameDialog;
 class ConnectionDialog;
+class ScoreDialog;
+class GraphDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -134,6 +137,10 @@ private slots:
 
 	void on_actionShowDebugConsole_triggered();
 
+    void on_actionScore_triggered();
+
+    void on_actionGraphs_triggered();
+
 private:
 	void setBoardColor( const QColor &light, const QColor &dark );
 	void updateBoards();
@@ -151,6 +158,8 @@ private:
 	PieceSet *pset;
 	ResultsDialog *rd;
 	EmailGameDialog *ed;
+    ScoreDialog *sd;
+    GraphDialog *gd;
 	ConnectionDialog *cd;
 	QString appDirectory;
 	config::ConfigVarBase *cfgRoot;

@@ -35,7 +35,7 @@
      <x>0</x>
      <y>0</y>
      <width>613</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -103,9 +103,17 @@
     </property>
     <addaction name="actionShowDebugConsole"/>
    </widget>
+   <widget class="QMenu" name="menuGame">
+    <property name="title">
+     <string>Game</string>
+    </property>
+    <addaction name="actionScore"/>
+    <addaction name="actionGraphs"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAppearance"/>
    <addaction name="menuBoard"/>
+   <addaction name="menuGame"/>
    <addaction name="menuTournament"/>
    <addaction name="menuDebug"/>
    <addaction name="menuHelp"/>
@@ -265,6 +273,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionScore">
+   <property name="text">
+    <string>History</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionGraphs">
+   <property name="text">
+    <string>Graphs</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
  </widget>

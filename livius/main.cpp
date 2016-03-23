@@ -29,13 +29,16 @@ freely, subject to the following restrictions:
 #include "chess/chess.h"
 #include "core/apppath.h"
 
+MainWindow* ww;
+
 int main(int argc, char *argv[])
 {
 	ChessInit init;
 	(void)init;
 	QApplication a(argc, argv);
-	MainWindow w( core::getAppPath() );
+    MainWindow w( core::getAppPath() );
 	w.showMaximized();
 
+    ww = &w;
 	return a.exec();
 }

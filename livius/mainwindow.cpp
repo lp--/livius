@@ -39,6 +39,8 @@ freely, subject to the following restrictions:
 #include "resultsdialog.h"
 #include "emailgamedialog.h"
 #include "pgndialog.h"
+#include "scoredialog.h"
+#include "graphdialog.h"
 #include "aboutdialog.h"
 #include "debugconsoledialog.h"
 #include "config/config.h"
@@ -575,4 +577,36 @@ void MainWindow::on_actionShowDebugConsole_triggered()
 	DebugConsoleDialog dlg( this );
 	dlg.setClient( lf->getClient() );
 	dlg.exec();
+}
+
+void MainWindow::on_actionScore_triggered()
+{
+    sd = new ScoreDialog(this);
+    sd->show();
+
+    LiveFrame *lf = getLiveFrame();
+    Q_ASSERT( lf );
+    if ( !lf )
+        return;		// better safe than sorry
+
+
+    sd->setText( lf->getScore() );
+//    PGNialog pd( this );
+//	pd.setPGN( lf->getPGN() );
+//	sig::Connection conn = lf->sigPGNChanged.connect( &pd, &PGNDialog::setPGN );
+//	pd.exec();
+//	conn.disconnect();
+
+}
+
+void MainWindow::on_actionGraphs_triggered()
+{
+    gd = new GraphDialog(this);
+    gd->show();
+
+    LiveFrame *lf = getLiveFrame();
+    Q_ASSERT( lf );
+    if ( !lf )
+        return;		// better safe than sorry
+    gd->updateAll(lf->getVScore(), lf->getVTime(), lf->getVDepth(), lf->getVNPS(), lf->getNum0());
 }

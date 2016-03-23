@@ -2,7 +2,7 @@
 #define GRAPHDIALOG_H
 
 #include <QDialog>
-#include <qcustomplot.h>
+#include "qcustomplot.h"
 
 namespace Ui {
 class GraphDialog;

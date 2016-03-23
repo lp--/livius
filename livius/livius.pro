@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     aboutdialog.cpp \
     debugconsoledialog.cpp \
     scoredialog.cpp \
-    graphdialog.cpp
+    graphdialog.cpp \
+    qcustomplot.cpp
 
 HEADERS  += mainwindow.h \
     liveinfo.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     debugconsoledialog.h \
     ack.h \
     scoredialog.h \
-    graphdialog.h
+    graphdialog.h \
+    qcustomplot.h
 
 FORMS    += mainwindow.ui \
     liveinfo.ui \
@@ -62,5 +64,3 @@ FORMS    += mainwindow.ui \
 
 RESOURCES += \
     livius.qrc
-
-unix: LIBS += -lqcustomplot

@@ -316,12 +316,14 @@ bool LiveFrame::parseMove( int color, AckType ack, const char *c, bool nobuffer 
 	TLCVClient::skipNonSpc( c );
 	int mnum = (int)QString( (std::string(beg, c-beg)).c_str() ).toDouble();
     if( mnum < prevmnum ){
-        current.mnum0 = mnum;
+        curcolor = 0;
+        current.mnum0 = 0;
         current.score.clear();
         current.secs.clear();
         current.depth.clear();
         current.nps.clear();
     }
+    if(current.mnum0 == 0 && current.score.size() > 0)current.mnum0 = mnum-1;
     prevmnum=mnum;
 
 	TLCVClient::skipSpc( c );
